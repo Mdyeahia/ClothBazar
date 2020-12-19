@@ -8,7 +8,7 @@ using ClothBazar.Entities;
 
 namespace ClothBazar.Database
 {
-    class CBContext:DbContext
+    public class CBContext:DbContext
     {
         public CBContext() : base("ClothBazarConnection")
         {
