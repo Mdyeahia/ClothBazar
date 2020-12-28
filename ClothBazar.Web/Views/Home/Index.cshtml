@@ -1,5 +1,10 @@
-﻿@{
+﻿@model ClothBazar.Web.ViewModels.HomeViewModel
+@{
     ViewBag.Title = "Home Page";
+    var firstCategory = Model.FeaturedCategories[0];
+    var secondCategory = Model.FeaturedCategories[1];
+    var thirdtCategory = Model.FeaturedCategories[2];
+    var fourthCategory= Model.FeaturedCategories[3];
 }
 <!-- SLIDER -->
 <div class="rev_slider_wrapper fullwidthbanner-container">
@@ -188,11 +193,15 @@
                     <div class="item data-effect-item">
                         <div class="inner">
                             <div class="thumb">
-                                <img src="~/Content/images/image-box/imgbox-1-375x500.jpg" alt="Image">
-                                <div class="elm-btn">
-                                    <a href="#" class="themesflat-button bg-white width-150">For Men’s</a>
-                                </div>
-                                <div class="overlay-effect bg-color-1"></div>
+                                @if (firstCategory != null)
+                                {
+                                    <img src="@firstCategory.ImageURL" alt="Image">
+                                    <div class="elm-btn">
+                                        <a href="#" class="themesflat-button bg-white width-150">@firstCategory.Name</a>
+                                    </div>
+                                    <div class="overlay-effect bg-color-1"></div>
+                                }
+                                
                             </div>
                         </div>
                     </div>
@@ -203,11 +212,15 @@
                     <div class="item data-effect-item">
                         <div class="inner">
                             <div class="thumb">
-                                <img src="~/Content/images/image-box/imgbox-1-375x240.jpg" alt="Image">
-                                <div class="elm-btn">
-                                    <a href="#" class="themesflat-button bg-white width-150">For Kid’s</a>
-                                </div>
-                                <div class="overlay-effect bg-color-1"></div>
+                                @if (secondCategory != null)
+                                {
+                                    <img src="@secondCategory.ImageURL" alt="Image">
+                                    <div class="elm-btn">
+                                        <a href="#" class="themesflat-button bg-white width-150">@secondCategory.Name</a>
+                                    </div>
+                                    <div class="overlay-effect bg-color-1"></div>
+                                }
+                                
                             </div>
                         </div>
                     </div>
@@ -215,11 +228,16 @@
                     <div class="item data-effect-item">
                         <div class="inner">
                             <div class="thumb">
-                                <img src="~/Content/images/image-box/imgbox-2-375x240.jpg" alt="Image">
-                                <div class="elm-btn">
-                                    <a href="#" class="themesflat-button bg-white width-150">accessories</a>
-                                </div>
-                                <div class="overlay-effect bg-color-1"></div>
+                                @if (thirdtCategory != null)
+                                {
+                                    <img src=@thirdtCategory.ImageURL alt="Image">
+                                    <div class="elm-btn">
+                                        <a href="#" class="themesflat-button bg-white width-150">@thirdtCategory.Name</a>
+                                    </div>
+                                    <div class="overlay-effect bg-color-1"></div>
+
+                                }
+                                
                             </div>
                         </div>
                     </div>
@@ -230,11 +248,16 @@
                     <div class="item data-effect-item">
                         <div class="inner">
                             <div class="thumb">
-                                <img src="~/Content/images/image-box/imgbox-2-375x500.jpg" alt="Image">
-                                <div class="elm-btn">
-                                    <a href="#" class="themesflat-button bg-white width-150">For woMen’s</a>
-                                </div>
-                                <div class="overlay-effect bg-color-1"></div>
+                                @if (fourthCategory != null)
+                                {
+                                    <img src=@fourthCategory.ImageURL alt="Image">
+                                    <div class="elm-btn">
+                                        <a href="#" class="themesflat-button bg-white width-150">@fourthCategory.Name</a>
+                                    </div>
+                                    <div class="overlay-effect bg-color-1"></div>
+
+                                }
+                                
                             </div>
                         </div>
                     </div>
