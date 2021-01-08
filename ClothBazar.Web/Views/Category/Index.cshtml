@@ -1,11 +1,26 @@
-﻿@model List<ClothBazar.Entities.Category>
+﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Categories";
 }
 
-<h2>Index</h2>
+<div class="container">
+    <div id="tableContainer">
+        @{
+            Html.RenderAction("CategoryTable");
+        }
 
-@foreach (var category in Model)
-{
-    <h1>@category.Name</h1>
-}
+
+    </div>
+
+    <hr />
+    <div id="actionTable">
+
+    </div>
+</div>
+<script>
+    function focusAction(controlToFocus) {
+        $('html, body').animate({
+            scrollTop: $("#" + controlToFocus).offset().top - 100
+        }, 1000);
+    }
+</script>

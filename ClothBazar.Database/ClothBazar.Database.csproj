@@ -68,6 +68,18 @@
     <Compile Include="Migrations\202012280935506_AddedIsFeature.Designer.cs">
       <DependentUpon>202012280935506_AddedIsFeature.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202101040558510_Configurationable.cs" />
+    <Compile Include="Migrations\202101040558510_Configurationable.Designer.cs">
+      <DependentUpon>202101040558510_Configurationable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202101061059040_CategoryIdadded.cs" />
+    <Compile Include="Migrations\202101061059040_CategoryIdadded.Designer.cs">
+      <DependentUpon>202101061059040_CategoryIdadded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202101071404215_ImageUrlInProduct.cs" />
+    <Compile Include="Migrations\202101071404215_ImageUrlInProduct.Designer.cs">
+      <DependentUpon>202101071404215_ImageUrlInProduct.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -93,6 +105,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202012280935506_AddedIsFeature.resx">
       <DependentUpon>202012280935506_AddedIsFeature.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101040558510_Configurationable.resx">
+      <DependentUpon>202101040558510_Configurationable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101061059040_CategoryIdadded.resx">
+      <DependentUpon>202101061059040_CategoryIdadded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101071404215_ImageUrlInProduct.resx">
+      <DependentUpon>202101071404215_ImageUrlInProduct.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

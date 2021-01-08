@@ -5,25 +5,36 @@
 
 <h2>Create</h2>
 
-<form method="post">
+<form id="createTable">
+    <div class="row">
+        <div class="col-md-8">
+            <label>Name</label>
+            <input name="Name" />
+            <br />
+            <label>Description</label>
+            <input name="Description" />
+            <br />
+            <label>Image</label>
+            <input id="ImageURL" name="ImageURL" type="hidden" />
+            <input id="imageUpload" name="Image" type="file" accept=".png,.jpg" />
+            
+            <br />
+            <label>Is Featured ?</label>
+            <input name="isFeatured" type="radio" value="True" />True
+            <input name="isFeatured" type="radio" value="False" />False
+            <br />
 
-    <label>Name</label>
-    <input name="Name"/>
-    <br/>
-    <label>Description</label>
-    <input name="Description"/>
-    <br />
-    <label>Image</label>
-    <input id="ImageURL"name="ImageURL"type="hidden"/>
-    <input id="imageUpload" name="Image" type="file"accept=".png,.jpg" />
-    <img class="img-thumbnail img-fluid" id="categoryImage" />
-    <br/>
-    <label>Is Featured ?</label>
-    <input name="isFeatured"type="radio"value="True"/>True
-    <input name="isFeatured" type="radio" value="False" />False
-    <br/>
+            <button id="saveBtn" type="button" class="btn btn-primary">Save</button>
+            <button id="cancelBtn" type="button" class="btn btn-primary">Cancel</button>
 
-    <button type="submit">Save</button>
+        </div>
+        <div class="col-md-4">
+            <div class="thumb">
+                <img class="img-thumbnail img-fluid" id="categoryImage" />
+            </div>
+            </div>
+    </div>
+
 
 </form>
 <script>
@@ -59,5 +70,27 @@
                 alert("FAIL");
             });
     });
+    $("#saveBtn").click(function () {
 
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("Create", "Category")',
+                data: $("#createTable").serialize()
+
+
+            })
+            .done(function (response) {
+                $("#tableContainer").html(response),
+                    $("#createTable").html("");
+                focusAction("tableContiner");
+            })
+            .fail(function (xmlHttpRequest, textStatus, errorThrown) {
+                alert("Fail");
+            });
+
+    });
+    $("#cancelBtn").click(function () {
+        $("#actionTable").html("");
+        focusAction("tableContiner");
+    });
 </script>

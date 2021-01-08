@@ -1,54 +1,102 @@
-﻿@model List<Category>
+﻿@model NewProductViewModel
 @{
     ViewBag.Title = "Create";
+    var imageURL = "/Content/images/system/placeholder-image.png";
 }
 
-<form id="createTable">
-    <div class="form-group">
-        <label>Category</label>
-        <select class="form-control" name="CategoryID">
-            @foreach (var category in Model)
-            {
-                <option value="@category.ID">@category.Name</option>
-            }
-        </select>
-        
+<form id="createProduct">
+    <div class="row">
+                <div class="col-md-8">
+                <div class="form-group">
+                    <label>Category</label>
+                    <select class="form-control" name="CategoryID">
+                        @foreach (var category in Model.AvailableCategories)
+                        {
+                            <option value="@category.ID">@category.Name</option>
+                        }
+                    </select>
+
+                </div>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input class="form-control" name="Name"/>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input class="form-control" name="Description"/>
+                </div>
+                <div class="form-group">
+                    <label>Price</label>
+                    <input class="form-control" name="Price"/>
+                </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                    </div>
+                    <br />
+                    <label>Image</label>
+                    <input id="ImageURL" name="ImageURL" type="hidden" />
+                    <input id="imageUpload" name="Image" type="file" accept=".png,.jpg" />
+                    <br/>
+                <button id="saveBtn" type="button" class="btn btn-primary">Submit</button>
+                <button id="cancelBtn" type="button" class="btn btn-primary">Cancel</button>
+                </div>
+        <div class="col-md-4">
+            <div class="thumb">
+                <img class="img-thumbnail img-fluid" id="productImage" src="@imageURL" />
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label>Name</label>
-        <input class="form-control" name="Name"/>
-    </div>
-    <div class="form-group">
-        <label>Description</label>
-        <input class="form-control" name="Description" />
-    </div>
-    <div class="form-group">
-        <label>Price</label>
-        <input class="form-control" name="Price" />
-    </div>
-    <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-    </div>
-    <button  id="saveBtn" type="button" class="btn btn-primary">Submit</button>
 </form>
 
 <script>
+    $("#imageUpload").change(function () {
+        var element = this;
+        var formData = new FormData();
+        var totalFiles = element.files.length;
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+        $.ajax({
+                type: 'POST',
+                url: '@Url.Action("UploadImage", "Shared")',
+                dataType: 'json',
+                data: formData,
+                contentType: false,
+                processData: false
+            })
+            .done(function (response) {
+                console.log(response);
+                if (response.Success) {
+                    $("#ImageURL").val(response.ImageURL);
+                    $("#productImage").attr("src", response.ImageURL);
+                }
+            })
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            });
+    });
     $("#saveBtn").click(function () {
 
         $.ajax({
                 type:"POST",
-                url: 'Product/create',
-                data: $("#createTable").serialize()
+                url: '@Url.Action("Create", "Product")',
+                data: $("#createProduct").serialize()
 
             })
             .done(function (response) {
                 $("#tableContainer").html(response),
-                    $("#createTable").html("");
+                    $("#actionTable").html("");
+                focusAction("tableContiner");
             })
             .fail(function (xmlHttpRequest, textStatus, errorThrown) {
                 alert("Fail");
             });
 
+    });
+    $("#cancelBtn").click(function () {
+        $("#actionTable").html("");
+        focusAction("tableContiner");
     });
 </script>

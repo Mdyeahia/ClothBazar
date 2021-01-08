@@ -1,24 +1,100 @@
-﻿@model ClothBazar.Entities.Category
+﻿@model ClothBazar.Web.ViewModels.EditCategoryViewModel
 @{
     ViewBag.Title = "Edit";
     var trueChecked = Model.isFeatured ? "checked" : string.Empty;
     var falseChecked = !Model.isFeatured ? "checked" : string.Empty;
+    var imageURL = !string.IsNullOrEmpty(Model.ImageURL) ? Model.ImageURL : "/Content/images/system/placeholder-image.png";
 }
 
-<h2>Create</h2>
+<h2>Edit Category</h2>
 
-<form method="post">
-    <input type="hidden"name="ID"value="@Model.ID" />
-    <label>Name</label>
-    <input name="Name" value="@Model.Name"/>
-    <br/>
-    <label>Description</label>
-    <input name="Description"value="@Model.Description"/>
-    <label>Is Featured ?</label>
-    <input name="isFeatured" type="radio" value="True"@trueChecked />True
-    <input name="isFeatured" type="radio" value="False" @falseChecked/>False
-    <br />
+<form id="editCategory">
+    <div class="row">
+        <div class="col-md-8">
+            <input type="hidden"name="ID"value="@Model.ID"/>
+            <label>Name</label>
+            <input name="Name" value="@Model.Name"/>
+            <br/>
+            <label>Description</label>
+            <input name="Description"value="@Model.Description"/>
+            <br/>
+            <label>Image</label>
+            <input id="ImageURL" name="ImageURL" type="hidden"value="@Model.ImageURL"/>
+            <input id="imageUpload" name="Image" type="file" accept=".png,.jpg"/>
 
-    <button type="submit">Save</button>
+            <br/>
+            <label>Is Featured ?</label>
+            <input name="isFeatured" type="radio" value="True"@trueChecked/>True
+            <input name="isFeatured" type="radio" value="False" @falseChecked/>False
+            <br/>
+        </div>
+            <div class="col-md-4">
+                <div class="thumb">
+                    <img class="img-thumbnail img-fluid" src="@imageURL" id="categoryImage"value="@Model.ImageURL" />
+                </div>
+            </div>
+        
+    </div>
+
+
+    <button id="updateBtn" type="button">Update</button>
+    <button id="cancelBtn" type="button">Cancel</button>
 
 </form>
+<script>
+    $("#imageUpload").change(function () {
+        var element = this;
+
+        var formData = new FormData();
+
+        var totalFiles = element.files.length;
+
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+
+        $.ajax({
+                type: 'POST',
+                url: '@Url.Action("UploadImage", "Shared")',
+                dataType: 'json',
+                data: formData,
+                contentType: false,
+                processData: false
+            })
+            .done(function (response) {
+                console.log(response);
+
+                if (response.Success) {
+                    $("#ImageURL").val(response.ImageURL);
+                    $("#categoryImage").attr("src", response.ImageURL);
+                }
+            })
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            });
+    });
+
+    $("#updateBtn").click(function() {
+
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("Edit", "Category")',
+                data: $("#editCategory").serialize()
+            })
+            .done(function(response) {
+                $("#tableContainer").html(response),
+                    $("#actionTable").html("");
+                focusAction("tableContiner");
+            })
+            .fail(function(xmlHttpRequest, textStatus, errorThrown) {
+                alert("Fail");
+            });
+    });
+
+    $("#cancelBtn").click(function () {
+        $("#actionTable").html("");
+        focusAction("tableContiner");
+    });
+
+</script>

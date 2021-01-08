@@ -1,0 +1,134 @@
+﻿@model ClothBazar.Web.ViewModels.CategorySearchViewModel
+@{
+    ViewBag.Title = "CategoryTable";
+}
+
+<h2>CategoryTable</h2>
+<div>
+    <form method="post">
+
+        <input id="searchTxt" placeholder="Search.." name="Search">
+        <button type="button" id="searchBtn"><i class="fa fa-search"></i></button>
+    </form>
+    @*<form method="post">
+            <input id="searchTxt" name="Search"/>
+            <button type="button"id="searchBtn">Search</button>
+        </form>*@
+    <button type="button" id="newBtn">New</button>
+    <button type="resetBtn" id="newBtn">Reset</button>
+</div>
+<div id="tableContainer">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Category Name</th>
+                <th>Products</th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Categories != null && Model.Categories.Count > 0)
+            {
+                foreach (var category in Model.Categories)
+                {
+                    <tr>
+                        <td>@category.Name</td>
+                        <td>
+                            @category.Products.Count
+                        </td>
+
+                        <td>
+                            <button class="editBtn" data-id="@category.ID">Edit</button>
+                            <button class="deleteBtn" data-id="@category.ID">Delete</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+
+    $("#searchBtn").click(function () {
+        var searchValue = $("#searchTxt").val();
+
+        $.ajax({
+            url: '@Url.Action("CategoryTable","Category")',
+            data: {
+                search: searchValue
+            }
+        }).done(function(response) {
+            $("#tableContainer").html(response);
+        }).fail(function(xmlHttpRequest, textStatus, errorThrown) {
+            alert("Fail");
+        });
+
+    });
+    $("#resetBtn").click(function () {
+        var searchValue = '';
+
+        $.ajax({
+                url: '@Url.Action("CategoryTable", "Category")',//'/Category/CategoryTable',
+                data: {
+                    search: searchValue
+                }
+            })
+            .done(function (response) {
+                $("#tableContiner").html(response);
+            })
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            });
+    });
+    $("#newBtn").click(function() {
+
+        $.ajax({
+            url: '@Url.Action("Create","Category")',
+
+
+        }).done(function(response) {
+            $("#actionTable").html(response);
+            focusAction("actionTable");
+        }).fail(function(xmlHttpRequest, textStatus, errorThrown) {
+            alert("Fail");
+        });
+
+    });
+    $(".editBtn").click(function() {
+
+        $.ajax({
+            url: '@Url.Action("Edit","Category")',
+            data: {
+                Id: $(this).attr('data-ID')
+            }
+
+        }).done(function(response) {
+            $("#actionTable").html(response);
+            focusAction("actionTable");
+        }).fail(function(xmlHttpRequest, textStatus, errorThrown) {
+            alert("Fail");
+        });
+
+    });
+    $(".deleteBtn").click(function() {
+        var confirmDelete = confirm("Do your want to delete the data ?");
+        if (confirmDelete) {
+            $.ajax({
+                Type: "POST",
+                url: '@Url.Action("Delete","Category")',
+                data: {
+                    Id: $(this).attr('data-ID')
+                }
+            }).done(function(response) {
+                $("#actionTable").html(response);
+            }).fail(function(xmlHttpRequest, textStatus, errorThrown) {
+                alert("Fail");
+            });
+        }
+    });
+
+    
+
+</script>

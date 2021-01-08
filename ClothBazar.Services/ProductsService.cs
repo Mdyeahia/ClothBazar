@@ -11,14 +11,43 @@ namespace ClothBazar.Services
 {
     public class ProductsService
     {
+        #region Singleton
+
+        public static ProductsService Instance
+        {
+            get
+            {
+                if (instance == null) instance = new ProductsService();
+                {
+                    return instance;
+                }
+            }
+        }
+        private static ProductsService instance { get; set; }
+
+        private ProductsService()
+        {
+
+        }
+
+        #endregion
+
+
         public Product GetProduct(int ID)
         {
             using (var context = new CBContext())
             {
-                return context.Products.Find(ID);
+                return context.Products.Where(x => x.ID == ID).Include(x => x.Category).FirstOrDefault();
             }
         }
-        public List<Product> GetProducts()
+        public List<Product> GetProducts(List<int> IDs)
+        {
+            using (var context = new CBContext())
+            {
+                return context.Products.Where(p => IDs.Contains(p.ID)).ToList();
+            }
+        }
+        public List<Product> GetProducts(int pageNo)
         {
             using (var context = new CBContext())
             {
