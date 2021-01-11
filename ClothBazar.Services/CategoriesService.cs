@@ -33,11 +33,55 @@ namespace ClothBazar.Services
                 return context.Categories.Find(ID);
             }
         }
-        public List<Category> GetCategories()
+
+        public int GetCategoriesCount(string search)
+        {
+            using (var context=new CBContext())
+            {
+
+                if (!string.IsNullOrEmpty(search))
+                {
+                    return context.Categories.Count(category => category.Name != null
+                                                                && category.Name.ToLower()
+                                                                    .Contains(search.ToLower()));
+                }
+                else
+                {
+                    return context.Categories.Count();
+                }
+            }
+        }
+        public List<Category> GetAllCategories()
         {
             using (var context = new CBContext())
             {
-                return context.Categories.Include(p => p.Products).ToList();
+                return context.Categories.ToList();
+            }
+        }
+        public List<Category> GetCategories(string search,int  pageNo)
+        {
+            int pageSize = int.Parse(ConfigurationsService.Instance.GetConfig("ListingPageSize").Value);
+            using (var context = new CBContext())
+            {
+                if (!string.IsNullOrEmpty(search))
+                {
+                    return context.Categories.Where(c => c.Name != null && c.Name.ToLower().Contains(search.ToLower()))
+                            .OrderBy(c => c.ID)
+                            .Skip((pageNo - 1) * pageSize)
+                            .Take(pageSize)
+                            .Include(c => c.Products)
+                            .ToList();
+                }
+                else
+                {
+                    return context.Categories
+                        .OrderBy(c => c.ID)
+                        .Skip((pageNo - 1) * pageSize)
+                        .Take(pageSize)
+                        .Include(c => c.Products)
+                        .ToList();
+                }
+                
             }
         }
         public List<Category> GetFeaturedCategories()

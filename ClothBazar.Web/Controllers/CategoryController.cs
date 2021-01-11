@@ -19,19 +19,24 @@ namespace ClothBazar.Web.Controllers
 
             return View();
         }
-        public ActionResult CategoryTable(string search)
+        public ActionResult CategoryTable(string search,int? pageNo)
         {
             CategorySearchViewModel model=new CategorySearchViewModel();
 
-            model.Categories = CategoriesService.Instance.GetCategories();
-            if (!string.IsNullOrEmpty(search))
+            pageNo = pageNo.HasValue ? pageNo.Value > 0 ? pageNo.Value : 1 : 1;
+
+            var totalRecords = CategoriesService.Instance.GetCategoriesCount(search);
+            model.Categories = CategoriesService.Instance.GetCategories(search, pageNo.Value);
+
+            int pageSize = int.Parse(ConfigurationsService.Instance.GetConfig("ListingPageSize").Value);
+
+            if (model.Categories!=null)
             {
-                
-                model.Categories = model.Categories.Where(p => p.Name != null && p.Name.ToLower().Contains(search.ToLower()))
-                    .ToList();
+                model.Pager = new Pager(totalRecords, pageNo, pageSize);
+                return PartialView("CategoryTable", model);
             }
 
-            return PartialView("CategoryTable",model);
+            return HttpNotFound();
         }
 
         [HttpGet]
@@ -99,5 +104,6 @@ namespace ClothBazar.Web.Controllers
             CategoriesService.Instance.DeleteCategory(category.ID);
             return RedirectToAction("Index");
         }
+
     }
 }
