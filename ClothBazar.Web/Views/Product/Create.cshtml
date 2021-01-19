@@ -88,7 +88,7 @@
             .done(function (response) {
                 $("#tableContainer").html(response),
                     $("#actionTable").html("");
-                focusAction("tableContiner");
+                focusAction("tableContainer");
             })
             .fail(function (xmlHttpRequest, textStatus, errorThrown) {
                 alert("Fail");
@@ -97,6 +97,6 @@
     });
     $("#cancelBtn").click(function () {
         $("#actionTable").html("");
-        focusAction("tableContiner");
+        focusAction("tableContainer");
     });
 </script>

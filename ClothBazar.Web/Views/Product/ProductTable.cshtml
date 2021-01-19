@@ -5,7 +5,7 @@
 
 <div>
     <form method="post">
-        <input id="searchTxt" placeholder="Search.." name="Search">
+        <input id="searchTxt" value="@Model.SearchTerm" name="Search">
         <button type="button" id="searchBtn"><i class="fa fa-search"></i></button>
    
     @*<form method="post">
@@ -90,13 +90,14 @@
     </div>
 </div>
 <script>
-    
+
 
     $(".pageButtons").click(function () {
         $.ajax({
             url: '@Url.Action("ProductTable", "Product")',
                 data: {
-                    pageNo: $(this).attr("data-pageNo")
+                    pageNo: $(this).attr("data-pageNo"),
+                    search: '@Model.SearchTerm'
                 }
             })
             .done(function (response) {
@@ -123,13 +124,14 @@
             });
 
     });
-    
+
     $("#resetBtn").click(function () {
         var searchValue = '';
 
         $.ajax({
                 url: '@Url.Action("ProductTable", "Product")',
                 data: {
+
                     search: searchValue
                 }
             })
@@ -189,7 +191,7 @@
             .then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                            type: "POST",
+                            type: 'POST',
                             url: '@Url.Action("Delete", "Product")',
                             data: {
                                 Id: $(this).attr('data-ID')

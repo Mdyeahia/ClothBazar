@@ -14,6 +14,16 @@ namespace ClothBazar.Database
         {
 
         }
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            //Write Fluent API configurations here
+
+            //Property Configurations
+            modelBuilder.Entity<Category>()
+                .Property(p => p.Name)
+                .IsRequired()
+                .HasMaxLength(50);
+        }
 
         public DbSet<Product>Products { get; set; }
         public DbSet<Category>Categories { get; set; }

@@ -22,7 +22,7 @@ namespace ClothBazar.Web.Controllers
         public ActionResult CategoryTable(string search,int? pageNo)
         {
             CategorySearchViewModel model=new CategorySearchViewModel();
-
+            model.SearchTerm = search;
             pageNo = pageNo.HasValue ? pageNo.Value > 0 ? pageNo.Value : 1 : 1;
 
             var totalRecords = CategoriesService.Instance.GetCategoriesCount(search);
@@ -33,7 +33,7 @@ namespace ClothBazar.Web.Controllers
             if (model.Categories!=null)
             {
                 model.Pager = new Pager(totalRecords, pageNo, pageSize);
-                return PartialView("CategoryTable", model);
+                return PartialView(model);
             }
 
             return HttpNotFound();
@@ -53,15 +53,22 @@ namespace ClothBazar.Web.Controllers
 
 
             //categoryService.SaveCategory(category);
-            var newCategory=new Category();
-            newCategory.Name = model.Name;
-            newCategory.Description = model.Description;
-            newCategory.ImageURL = model.ImageURL;
-            newCategory.isFeatured = model.isFeatured;
+            if(ModelState.IsValid)
+            {
+                var newCategory = new Category();
+                newCategory.Name = model.Name;
+                newCategory.Description = model.Description;
+                newCategory.ImageURL = model.ImageURL;
+                newCategory.isFeatured = model.isFeatured;
 
-            CategoriesService.Instance.SaveCategory(newCategory);
+                CategoriesService.Instance.SaveCategory(newCategory);
 
-            return RedirectToAction("CategoryTable");
+                return RedirectToAction("CategoryTable");
+            }
+
+            return new HttpStatusCodeResult(500);
+            
+            
         }
         [HttpGet]
         public ActionResult Edit(int ID)
@@ -90,20 +97,13 @@ namespace ClothBazar.Web.Controllers
             CategoriesService.Instance.UpdateCategory(existingCategory);
             return RedirectToAction("CategoryTable");
         }
-        [HttpGet]
+        [HttpPost]
         public ActionResult Delete(int ID)
         {
-            var category = CategoriesService.Instance.GetCategory(ID);
-            return View(category);
+            CategoriesService.Instance.DeleteCategory(ID);
+            return RedirectToAction("CategoryTable");
         }
 
-        [HttpPost]
-        public ActionResult Delete(Category category)
-        {
-
-            CategoriesService.Instance.DeleteCategory(category.ID);
-            return RedirectToAction("Index");
-        }
 
     }
 }

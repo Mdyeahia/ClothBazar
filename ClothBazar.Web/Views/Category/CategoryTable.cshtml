@@ -7,7 +7,7 @@
 <div>
     <form method="post">
 
-        <input id="searchTxt" placeholder="Search.." name="Search">
+        <input id="searchTxt" value="@Model.SearchTerm" name="Search">
         <button type="button" id="searchBtn"><i class="fa fa-search"></i></button>
     </form>
     @*<form method="post">
@@ -20,31 +20,31 @@
 <div id="tableContainer">
     <table class="table table-striped">
         <thead>
-        <tr>
-            <th>Category Name</th>
-            <th>Products</th>
-            <th>Actions</th>
+            <tr>
+                <th>Category Name</th>
+                <th>Products</th>
+                <th>Actions</th>
 
-        </tr>
+            </tr>
         </thead>
         <tbody>
-        @if (Model.Categories != null && Model.Categories.Count > 0)
-        {
-            foreach (var category in Model.Categories)
+            @if (Model.Categories != null && Model.Categories.Count > 0)
             {
-                <tr>
-                    <td>@category.Name</td>
-                    <td>
-                        @category.Products.Count
-                    </td>
+                foreach (var category in Model.Categories)
+                {
+                    <tr>
+                        <td>@category.Name</td>
+                        <td>
+                            @category.Products.Count
+                        </td>
 
-                    <td>
-                        <button class="editBtn" data-id="@category.ID">Edit</button>
-                        <button class="deleteBtn" data-id="@category.ID">Delete</button>
-                    </td>
-                </tr>
+                        <td>
+                            <button class="editBtn" data-id="@category.ID">Edit</button>
+                            <button class="deleteBtn" data-id="@category.ID">Delete</button>
+                        </td>
+                    </tr>
+                }
             }
-        }
         </tbody>
     </table>
     <div>
@@ -68,7 +68,7 @@
             {
                 <button class="pageButtons" data-pageno="@(Model.Pager.CurrentPage + 1)">Next</button>
                 <button class="pageButtons" data-pageno="@Model.Pager.EndPage">Last</button>
-            }			
+            }
         }
     </div>
 </div>
@@ -76,11 +76,13 @@
 <script>
     $(".pageButtons").click(function () {
         $.ajax({
-                url: '@Url.Action("CategoryTable", "Category")',
-                data: {
-                    pageNo: $(this).attr("data-pageNo")
-                }
-            })
+            url: '@Url.Action("CategoryTable", "Category")',
+            data: {
+                pageNo: $(this).attr("data-pageNo"),
+                search: '@Model.SearchTerm'
+
+            }
+        })
             .done(function (response) {
                 $("#tableContainer").html(response);
             })
@@ -96,9 +98,9 @@
             data: {
                 search: searchValue
             }
-        }).done(function(response) {
+        }).done(function (response) {
             $("#tableContainer").html(response);
-        }).fail(function(xmlHttpRequest, textStatus, errorThrown) {
+        }).fail(function (xmlHttpRequest, textStatus, errorThrown) {
             alert("Fail");
         });
 
@@ -107,11 +109,11 @@
         var searchValue = '';
 
         $.ajax({
-                url: '@Url.Action("CategoryTable", "Category")',//'/Category/CategoryTable',
-                data: {
-                    search: searchValue
-                }
-            })
+            url: '@Url.Action("CategoryTable", "Category")',//'/Category/CategoryTable',
+            data: {
+                search: searchValue
+            }
+        })
             .done(function (response) {
                 $("#tableContainer").html(response);
             })
@@ -119,32 +121,32 @@
                 alert("FAIL");
             });
     });
-    $("#newBtn").click(function() {
+    $("#newBtn").click(function () {
 
         $.ajax({
             url: '@Url.Action("Create","Category")',
 
 
-        }).done(function(response) {
+        }).done(function (response) {
             $("#actionTable").html(response);
             focusAction("actionTable");
-        }).fail(function(xmlHttpRequest, textStatus, errorThrown) {
+        }).fail(function (xmlHttpRequest, textStatus, errorThrown) {
             alert("Fail");
         });
 
     });
-    $(".editBtn").click(function() {
+    $(".editBtn").click(function () {
 
         $.ajax({
             url: '@Url.Action("Edit","Category")',
             data: {
-                Id: $(this).attr('data-ID')
+                Id: $(this).attr('data-id')
             }
 
-        }).done(function(response) {
+        }).done(function (response) {
             $("#actionTable").html(response);
             focusAction("actionTable");
-        }).fail(function(xmlHttpRequest, textStatus, errorThrown) {
+        }).fail(function (xmlHttpRequest, textStatus, errorThrown) {
             alert("Fail");
         });
 
@@ -153,19 +155,19 @@
         var confirmDelete = confirm("Do your want to delete the data ?");
         if (confirmDelete) {
             $.ajax({
-                Type: "POST",
+                type: 'POST',
                 url: '@Url.Action("Delete","Category")',
                 data: {
                     Id: $(this).attr('data-ID')
                 }
             }).done(function(response) {
-                $("#actionTable").html(response);
+                $("#tableContainer").html(response);
             }).fail(function(xmlHttpRequest, textStatus, errorThrown) {
                 alert("Fail");
             });
         }
     });
 
-    
+
 
 </script>

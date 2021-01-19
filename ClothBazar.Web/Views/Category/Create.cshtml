@@ -5,7 +5,7 @@
 
 <h2>Create</h2>
 
-<form id="createTable">
+<form id="createCategory">
     <div class="row">
         <div class="col-md-8">
             <label>Name</label>
@@ -17,7 +17,7 @@
             <label>Image</label>
             <input id="ImageURL" name="ImageURL" type="hidden" />
             <input id="imageUpload" name="Image" type="file" accept=".png,.jpg" />
-            
+
             <br />
             <label>Is Featured ?</label>
             <input name="isFeatured" type="radio" value="True" />True
@@ -32,7 +32,7 @@
             <div class="thumb">
                 <img class="img-thumbnail img-fluid" id="categoryImage" />
             </div>
-            </div>
+        </div>
     </div>
 
 
@@ -51,13 +51,13 @@
         }
 
         $.ajax({
-                type: 'POST',
-                url: '@Url.Action("UploadImage", "Shared")',
-                dataType: 'json',
-                data: formData,
-                contentType: false,
-                processData: false
-            })
+            type: 'POST',
+            url: '@Url.Action("UploadImage", "Shared")',
+            dataType: 'json',
+            data: formData,
+            contentType: false,
+            processData: false
+        })
             .done(function (response) {
                 console.log(response);
 
@@ -70,27 +70,71 @@
                 alert("FAIL");
             });
     });
-    $("#saveBtn").click(function () {
+    $("#createCategory").validate({
+        rules: {
+            Name: {
+                required: true,
+                minlength: 5,
+                maxlength: 50
+            },
+            Description: {
+                maxlength: 500
+            }
+        },
+        messages: {
+            Name: {
+                required: 'Name is required!',
+                minlength: 'Minimum Length is 5',
+                maxlength: 'Maximum Length is 50'
+            },
+            Description: {
+                maxlength: 'Maximum Length is 500'
+            }
+        }
+    });
 
-        $.ajax({
+    $("#saveBtn").click(function () {
+        if ($("#createCategory").valid()) {
+
+            $.ajax({
                 type: "POST",
                 url: '@Url.Action("Create", "Category")',
-                data: $("#createTable").serialize()
+                data: $("#createCategory").serialize()
 
 
             })
-            .done(function (response) {
-                $("#tableContainer").html(response),
-                    $("#createTable").html("");
-                focusAction("tableContiner");
-            })
-            .fail(function (xmlHttpRequest, textStatus, errorThrown) {
-                alert("Fail");
+                .done(function (response) {
+                    $("#tableContainer").html(response),
+                        $("#actionTable").html("");
+                    focusAction("tableContainer");
+                })
+                .fail(function (xmlHttpRequest, textStatus, errorThrown) {
+                    swal({
+                        title: "Warning",
+                        text: "Please enter all required fields.",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true
+                    });
+                });
+        }
+        else {
+            swal({
+                title: "JS Warning",
+                text: "Please enter all required fields.",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
             });
 
+        }
     });
+
+
+
+
     $("#cancelBtn").click(function () {
         $("#actionTable").html("");
-        focusAction("tableContiner");
+        focusAction("tableContainer");
     });
 </script>

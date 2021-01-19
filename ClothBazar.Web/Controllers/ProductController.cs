@@ -23,10 +23,11 @@ namespace ClothBazar.Web.Controllers
         {
             ProductSearchViewModel model = new ProductSearchViewModel();
 
-            model.PageNo = pageNo.HasValue ? pageNo.Value > 0 ? pageNo.Value : 1 : 1;
+            model.SearchTerm = search;
+            pageNo = pageNo.HasValue ? pageNo.Value > 0 ? pageNo.Value : 1 : 1;
 
             var totalRecords = ProductsService.Instance.GetAllProductCount(search);
-            model.Products = ProductsService.Instance.GetProducts(search, model.PageNo);
+            model.Products = ProductsService.Instance.GetProducts(search, pageNo.Value);
             int pageSize = int.Parse(ConfigurationsService.Instance.GetConfig("ListingPageSize").Value);
             if (model.Products!=null)
             {

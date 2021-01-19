@@ -113,8 +113,12 @@ namespace ClothBazar.Services
             using (var context = new CBContext())
             {
                // context.Entry(category).State = System.Data.Entity.EntityState.Modified;
-               var category = context.Categories.Find(ID);
-               context.Categories.Remove(category);
+               var category = context.Categories
+                   .Where(c => c.ID == ID)
+                   .Include(c => c.Products).FirstOrDefault();
+
+               context.Products.RemoveRange(category.Products);//first delete products of this category
+                context.Categories.Remove(category);
                 context.SaveChanges();
             }
         }

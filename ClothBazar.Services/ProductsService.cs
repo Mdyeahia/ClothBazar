@@ -53,7 +53,7 @@ namespace ClothBazar.Services
                 }
 
 
-                return context.Categories.Count();
+                return context.Products.Count();
 
             }
         }
