@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ClothBazar.Services;
+using ClothBazar.Entities.Code;
 using ClothBazar.Web.ViewModels;
 
 namespace ClothBazar.Web.Controllers
@@ -13,6 +14,18 @@ namespace ClothBazar.Web.Controllers
         
         //ProductsService productsService = new ProductsService();
         // GET: Shop
+        public ActionResult Index(string searchTerm,int? maximumPrice,int?minimumPrice,int? categoryID,int? sortBy)
+        {
+            ShopViewModel model = new ShopViewModel();
+            model.FeaturedCategories = CategoriesService.Instance.GetFeaturedCategories();
+            model.MaximumPrice = ProductsService.Instance.GetMaximumPrice();
+            model.Products =ProductsService.Instance.SearchProducts(searchTerm, maximumPrice, minimumPrice, categoryID, sortBy);
+            model.SortBy = sortBy;
+
+
+            return View(model);
+        }
+
         public ActionResult Checkout()
         {
             CheckoutViewModel model = new CheckoutViewModel();

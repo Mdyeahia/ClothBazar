@@ -101,6 +101,17 @@ namespace ClothBazar.Web.Controllers
             ProductsService.Instance.DeleteProduct(ID);
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public ActionResult Details(int ID)
+        {
+            ProductViewModel model = new ProductViewModel();
+            model.Product = ProductsService.Instance.GetProduct(ID); 
+
+            if (model.Product==null) { return HttpNotFound(); }
+
+            return View(model);
+        }
     
     }
 }
