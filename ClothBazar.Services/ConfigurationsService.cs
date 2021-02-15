@@ -37,5 +37,26 @@ namespace ClothBazar.Services
                 return Context.Configurations.Find(Key);
             }
         }
+
+        public int PageSize()
+        {
+            using (var Context = new CBContext())
+            {
+                var pageSizeConfig=Context.Configurations.Find("ListingPageSize");
+
+                return pageSizeConfig != null ? int.Parse(pageSizeConfig.Value) : 10;
+            }
+        }
+
+        public int ShopPageSize()
+        {
+            using (var context = new CBContext())
+            {
+                var pageSizeConfig = context.Configurations.Find("ShopPageSize");
+
+                return pageSizeConfig != null ? int.Parse(pageSizeConfig.Value) : 6;
+            }
+        }
+
     }
 }

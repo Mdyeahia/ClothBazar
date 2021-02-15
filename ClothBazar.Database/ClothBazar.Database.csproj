@@ -84,6 +84,10 @@
     <Compile Include="Migrations\202101190221329_BasicValidationAdded.Designer.cs">
       <DependentUpon>202101190221329_BasicValidationAdded.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202102060357114_AddedOrderItemandOrder.cs" />
+    <Compile Include="Migrations\202102060357114_AddedOrderItemandOrder.Designer.cs">
+      <DependentUpon>202102060357114_AddedOrderItemandOrder.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -121,6 +125,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202101190221329_BasicValidationAdded.resx">
       <DependentUpon>202101190221329_BasicValidationAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202102060357114_AddedOrderItemandOrder.resx">
+      <DependentUpon>202102060357114_AddedOrderItemandOrder.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

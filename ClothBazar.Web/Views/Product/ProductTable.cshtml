@@ -2,6 +2,8 @@
 @{
     ViewBag.Title = "ProductTable";
 }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
 
 <div>
     <form method="post">
@@ -65,7 +67,7 @@
         </tbody>
     </table>
     <div>
-        @if (Model.Pager != null)
+        @if (Model.Pager != null&& Model.Pager.TotalPages>1)
         {
 
             if (Model.Pager.CurrentPage > 1)
@@ -96,7 +98,7 @@
         $.ajax({
             url: '@Url.Action("ProductTable", "Product")',
                 data: {
-                    pageNo: $(this).attr("data-pageNo"),
+                    pageNo: $(this).attr("data-pageno"),
                     search: '@Model.SearchTerm'
                 }
             })
@@ -164,7 +166,7 @@
         $.ajax({
                 url: '@Url.Action("Edit", "Product")',
                 data: {
-                    Id: $(this).attr('data-ID')
+                    Id: $(this).attr('data-id')
                 }
 
             })
@@ -194,7 +196,7 @@
                             type: 'POST',
                             url: '@Url.Action("Delete", "Product")',
                             data: {
-                                Id: $(this).attr('data-ID')
+                                Id: $(this).attr('data-id')
                             }
 
                         })
@@ -217,7 +219,7 @@
 
     var products = [];
     $(".add-to-cart").click(function () {
-        var productID = $(this).attr('data-ID');
+        var productID = $(this).attr('data-id');
 
         products.push(productID);
         $.cookie('CartProducts', products.join("-"), { expires: 7, path: '/' });

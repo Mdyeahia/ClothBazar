@@ -26,9 +26,13 @@ namespace ClothBazar.Web.Controllers
             model.SearchTerm = search;
             pageNo = pageNo.HasValue ? pageNo.Value > 0 ? pageNo.Value : 1 : 1;
 
+            var pageSize = ConfigurationsService.Instance.PageSize();
+
             var totalRecords = ProductsService.Instance.GetAllProductCount(search);
-            model.Products = ProductsService.Instance.GetProducts(search, pageNo.Value);
-            int pageSize = int.Parse(ConfigurationsService.Instance.GetConfig("ListingPageSize").Value);
+            model.Products = ProductsService.Instance.GetProducts(search, pageNo.Value,pageSize);
+
+            //int pageSize = int.Parse(ConfigurationsService.Instance.GetConfig("ListingPageSize").Value);
+
             if (model.Products!=null)
             {
                 model.Pager = new Pager(totalRecords, pageNo, pageSize);
@@ -88,7 +92,13 @@ namespace ClothBazar.Web.Controllers
             existingProduct.Description = model.Description;
             existingProduct.Price = model.Price;
             existingProduct.ImageURL = model.ImageURL;
-            existingProduct.Category = CategoriesService.Instance.GetCategory(model.CategoryID);
+            existingProduct.Category = null;// CategoriesService.Instance.GetCategory(model.CategoryID);
+            existingProduct.CategoryID = model.CategoryID;
+
+            if (!string.IsNullOrEmpty(model.ImageURL))
+            {
+                existingProduct.ImageURL = model.ImageURL;
+            }
 
             //productsService.UpdateProduct(existingProduct);
 

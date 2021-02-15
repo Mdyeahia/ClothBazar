@@ -28,6 +28,7 @@
 
     <!-- Favicon and touch icons  -->
     <link href="favicon.ico" rel="shortcut icon">
+    <script src="~/Content/javascript/jquery-ui.js"></script>
 
     <!--[if lt IE 9]>
         <script src="~/Content/javascript/html5shiv.js"></script>
@@ -36,9 +37,9 @@
 </head>
 <body class="header_sticky header-style-1 has-menu-extra">
     <!-- Preloader -->
-    @*<div id="loading-overlay">
+    <div id="loading-overlay">
             <div class="loader"></div>
-        </div>*@<!-- Boxed -->
+        </div><!-- Boxed -->
     <div class="boxed">
         <div id="site-header-wrap">
             <!-- Header -->
@@ -58,17 +59,26 @@
                                 <button type="submit" class="header-search-submit" title="Search">Search</button>
                             </form>
                         </li>
-                        <li class="box-login">
-                            <a class="icon_login" href="#"></a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="box-login">
+                                <a class="icon_login" href="#">
+                                    @User.Identity.Name
+                                </a>
+                            </li>
+                        }
                         <li class="box-cart nav-top-cart-wrapper">
-                            <a class="icon_cart nav-cart-trigger active" href="#"><span>3</span></a>
+                            <a class="icon_cart nav-cart-trigger active" href="@Url.Action("Checkout", "Shop")"><span id="cartProductsCount">0</span></a>							
+                        </li>
+
+                        <li class="box-login box-cart nav-top-cart-wrapper">
+                            <a class="icon_login nav-cart-trigger active" href="#"></a>
                             <div class="nav-shop-cart">
                                 <div class="widget_shopping_cart_content">
                                     <div class="woocommerce-min-cart-wrap">
-                                        <ul class="woocommerce-mini-cart cart_list product_list_widget ">
-                                            <li class="woocommerce-mini-cart-item mini_cart_item">
-                                                <span>No Items in Shopping Cart</span>
+                                        <ul class="menu">
+                                            <li>
+                                                <a href="/">HOME</a>
                                             </li>
                                         </ul>
                                     </div><!-- /.widget_shopping_cart_content -->
@@ -215,7 +225,7 @@
     <script src="~/Content/javascript/equalize.min.js"></script>
     <script src="~/Content/javascript/gmap3.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIEU6OT3xqCksCetQeNLIPps6-AYrhq-s&region=GB"></script>
-    <script src="~/Content/javascript/jquery-ui.js"></script>
+    
 
     <script src="~/Content/javascript/jquery.cookie.js"></script>
     <script src="~/Content/javascript/main.js"></script>
